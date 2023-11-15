@@ -26,7 +26,7 @@ function run_kms_tests(){
   # Init performance tests
   /usr/pgsql-15/bin/pgbench -i -s 20 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
   # Run performance tests
-  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --transactions=50 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
+  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --time=600 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
 }
 
 function run_ekm_tests(){
@@ -34,7 +34,7 @@ function run_ekm_tests(){
   # Init performance tests
   /usr/pgsql-15/bin/pgbench -i -s 20 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
   # Run performance tests
-  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --transactions=50 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
+  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --time=600 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
 }
 
 ########################################################################################################################
