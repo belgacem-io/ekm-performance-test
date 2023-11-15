@@ -35,4 +35,23 @@
    ```sh
     terragrunt --terragrunt-working-dir terragrunt/gcp run-all apply
    ```
-   
+
+6. Connect to bastion host using IAP tunneling
+   ```sh
+    INSTANCE_NAME=$(gcloud --project=$PROJECT_ID  compute instances list --format="value(name)")
+    gcloud --project=$PROJECT_ID  compute ssh ${INSTANCE_NAME}
+   ```
+7. Install required tools
+   ```sh
+    sudo bash /etc/test/run_perf_tests.sh --install
+   ```
+
+8. Run tests against the database encrypted with KMS key
+   ```sh
+    sudo bash /etc/test/run_perf_tests.sh --kms
+   ```
+
+9. Run tests against the database encrypted with EKM key
+   ```sh
+    sudo bash /etc/test/run_perf_tests.sh --ekm
+   ```
