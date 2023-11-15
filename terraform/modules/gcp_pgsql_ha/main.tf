@@ -71,7 +71,7 @@ resource "google_kms_crypto_key" "db_encryption_key" {
 
   version_template {
     algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
-    protection_level = upper(var.kms_protection_level)
+    protection_level = upper(var.kms_key_protection_level)
   }
 }
 

@@ -8,9 +8,25 @@ variable "network_ip_range" {
   type = string
 }
 
-variable "classic_db_ip_range" {
+variable "kms_db_ip_range" {
   description = "CIDR range for database network"
   type = string
+}
+
+variable "ekm_db_ip_range" {
+  description = "CIDR range for database network"
+  type = string
+}
+
+variable "ekm_type" {
+  description = "EKM type, can be EXTERNAL OR EXTERNAL_VPC"
+  type = string
+}
+
+variable "ekm_key_external_url" {
+  description = "URL to external ekm key,Required when ekm type is EXTERNAL"
+  type = string
+  default = null
 }
 
 variable "gcp_terraform_sa_email" {
