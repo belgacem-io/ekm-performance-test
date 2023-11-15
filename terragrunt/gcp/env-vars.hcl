@@ -1,4 +1,10 @@
 locals {
-  module_name              = "main-gcp"
-  gcp_terraform_sa_email   = "${ get_env("GCP_IAC_SERVICE_ACCOUNT") }"
+  module_name            = "main-gcp"
+  prefix                 = "ekm-perf"
+  network_ip_range       = "10.0.0.0/24"
+  classic_db_ip_range    = "10.0.1.0/24"
+  gcp_terraform_sa_email = "${ get_env("GCP_IAC_SERVICE_ACCOUNT") }"
+  gcp_project_id         = "${ get_env("PROJECT_ID") }"
+  gcp_region             = "${ get_env("GCP_REGION") }"
+
 }

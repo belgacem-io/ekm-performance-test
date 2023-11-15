@@ -91,13 +91,24 @@ variable "enable_access_from_nonRFC1918_ranges" {
   description = "Enabled whn non RFC 1918 ranges are used in your VPC."
 }
 
+
 # KMS variables
 variable "kms_keyring_id" {
   type        = string
   description = "ID of an existing Cloud KMS KeyRing for asset encryption. Terraform will NOT create this keyring."
 }
 
-variable "kms_protection_level" {
+variable "kms_key_protection_level" {
   type        = string
   description = "The protection level to use for the KMS crypto key."
+}
+
+variable "kms_key_algorithm" {
+  type        = string
+  description = "The algorithm to use for the KMS crypto key."
+}
+variable "kms_key_external_url" {
+  type        = string
+  description = "The external url to use for the KMS crypto key."
+  default = null
 }

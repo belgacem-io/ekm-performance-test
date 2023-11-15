@@ -104,22 +104,6 @@ variable "labels" {
   description = "Map of labels"
 }
 
-variable "proxy_host_address" {
-  type        = string
-  description = "The company's Proxy IP address"
-}
-
-variable "proxy_host_port" {
-  type        = string
-  description = "The company's Proxy port"
-  default     = "3128"
-}
-
-variable "no_proxy_hosts" {
-  type        = list(string)
-  description = "The company's private DNS domains"
-}
-
 variable "update_policy" {
   type = list(object({
     max_surge_fixed              = number
