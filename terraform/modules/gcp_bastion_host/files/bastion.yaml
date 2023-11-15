@@ -1,0 +1,8 @@
+#cloud-config
+write_files:
+  - path: /etc/test/run_perf_tests.sh
+    permissions: "0644"
+    owner: root
+    content: |
+      ${indent(6, script_content)}
+

@@ -112,3 +112,9 @@ variable "kms_key_external_url" {
   description = "The external url to use for the KMS crypto key."
   default = null
 }
+
+variable "enable_psa_vpc_peering" {
+  type = bool
+  default = true
+  description = "If PSA must be enabled."
+}

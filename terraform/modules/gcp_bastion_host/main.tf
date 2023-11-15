@@ -53,7 +53,25 @@ module "instance_template" {
     scopes = ["cloud-platform"]
   }
 
+  # Install cloud-init if not available yet
+  startup_script = <<-CLOUD_INIT
+    #!/bin/bash
+    command -v cloud-init &>/dev/null || (yum install -y cloud-init && systemctl enable cloud-init && reboot)
+  CLOUD_INIT
+
   metadata = {
+    user-data = templatefile("${path.module}/files/bastion.yaml", {
+      script_content = templatefile("${path.module}/files/run_perf_tests.sh", {
+        database_kms_name     = var.db_kms.name
+        database_kms_host     = var.db_kms.host
+        database_kms_username = var.db_kms.username
+        database_kms_password = var.db_kms.password
+        database_ekm_name     = var.db_ekm.name
+        database_ekm_host     = var.db_ekm.host
+        database_ekm_username = var.db_ekm.username
+        database_ekm_password = var.db_ekm.password
+      })
+    }),
     enable-oslogin = "TRUE"
   }
 

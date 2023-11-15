@@ -21,6 +21,8 @@ resource "google_compute_global_address" "reserved_ip_range" {
 resource "google_service_networking_connection" "private_vpc_connection" {
   provider = google-beta
 
+  count = var.enable_psa_vpc_peering ? 1 : 0
+
   network                 = var.network_selflink
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [
@@ -30,8 +32,10 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 resource "google_compute_network_peering_routes_config" "psa_routes" {
 
+  count = var.enable_psa_vpc_peering ? 1 : 0
+
   project              = var.network_project_id
-  peering              = google_service_networking_connection.private_vpc_connection.peering
+  peering              = google_service_networking_connection.private_vpc_connection[0].peering
   network              = var.network_name
   export_custom_routes = true
   import_custom_routes = true
@@ -41,13 +45,15 @@ module "peering_non_rfc1918" {
   source  = "terraform-google-modules/gcloud/google"
   version = "~> 3.3"
 
+  count = var.enable_psa_vpc_peering ? 1 : 0
+
   enabled               = var.enable_access_from_nonRFC1918_ranges
   platform              = "linux"
   create_cmd_entrypoint = "gcloud"
   create_cmd_body       = join(" ", [
     "compute networks peerings",
     "update",
-    replace(google_service_networking_connection.private_vpc_connection.service, ".", "-"),
+    replace(google_service_networking_connection.private_vpc_connection[0].service, ".", "-"),
     "--project=${var.network_project_id} --network=${var.network_name}",
     "--export-subnet-routes-with-public-ip --import-subnet-routes-with-public-ip"
   ])
@@ -63,29 +69,22 @@ resource "google_project_service_identity" "gcp_sa_cloud_sql" {
   service  = "sqladmin.googleapis.com"
 }
 
-resource "google_kms_crypto_key" "db_encryption_key" {
-
-  name            = "${var.prefix}-key-${var.default_region}-${var.instance_name}-pgsql"
-  key_ring        = var.kms_keyring_id
-  rotation_period = "604800s"
-
-  version_template {
-    algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
-    protection_level = upper(var.kms_key_protection_level)
+# KMS settings
+module "db_encryption_key" {
+  source                   = "../gcp_kms_key"
+  project_id               = var.project_id
+  prefix                   = var.prefix
+  default_region           = var.default_region
+  kms_keyring_id           = var.kms_keyring_id
+  kms_key_external_url     = var.kms_key_external_url
+  kms_key_algorithm        = var.kms_key_algorithm
+  kms_key_protection_level = var.kms_key_protection_level
+  kms_key_name             = "database-vm-boot-disk"
+  key_iam_permissions      = {
+    "roles/cloudkms.cryptoKeyEncrypterDecrypter" = [
+      "serviceAccount:${google_project_service_identity.gcp_sa_cloud_sql.email}",
+    ]
   }
-}
-
-resource "google_kms_crypto_key_iam_binding" "db_encryption_iam" {
-  crypto_key_id = google_kms_crypto_key.db_encryption_key.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-
-  members = [
-    "serviceAccount:${google_project_service_identity.gcp_sa_cloud_sql.email}"
-  ]
-
-  depends_on = [
-    google_project_service_identity.gcp_sa_cloud_sql
-  ]
 }
 
 module "main" {
@@ -139,11 +138,11 @@ module "main" {
   user_name            = var.root_user_username
   user_password        = var.root_user_password
   additional_users     = []
-  encryption_key_name  = google_kms_crypto_key.db_encryption_key.id
+  encryption_key_name  = module.db_encryption_key.key_id
 
   depends_on = [
     google_compute_global_address.reserved_ip_range,
-    google_kms_crypto_key_iam_binding.db_encryption_iam
+    module.db_encryption_key
   ]
 }
 

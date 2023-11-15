@@ -156,5 +156,23 @@ variable "kms_key_algorithm" {
 variable "kms_key_external_url" {
   type        = string
   description = "The external url to use for the KMS crypto key."
-  default = null
+  default     = null
+}
+
+variable "db_kms" {
+  type = object({
+    name     = string
+    host     = string
+    username = string
+    password = string
+  })
+}
+
+variable "db_ekm" {
+  type = object({
+    name     = string
+    host     = string
+    username = string
+    password = string
+  })
 }
