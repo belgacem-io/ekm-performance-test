@@ -13,7 +13,10 @@ export DATABASE_EKM_PASSWORD="${database_ekm_password}"
 function install_tools(){
   echo "Installing tools."
   # Install pgbench
-  dnf install -y postgresql-contrib
+  dnf install -y \
+       https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  dnf -qy module disable postgresql
+  dnf install -y postgresql15-contrib
 }
 
 
@@ -21,17 +24,17 @@ function install_tools(){
 function run_kms_tests(){
   echo "Running KMS tests."
   # Init performance tests
-  pgbench -i -s 50 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
+  /usr/pgsql-15/bin/pgbench -i -s 20 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
   # Run performance tests
-  pgbench --log --jobs=2 --client=10 --transactions=50 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
+  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --transactions=50 --host="${database_kms_host}" --username="${database_kms_username}" ${database_kms_name}
 }
 
 function run_ekm_tests(){
   echo "Running EKM tests."
   # Init performance tests
-  pgbench -i -s 50 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
+  /usr/pgsql-15/bin/pgbench -i -s 20 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
   # Run performance tests
-  pgbench --log --jobs=2 --client=10 --transactions=50 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
+  /usr/pgsql-15/bin/pgbench --log --protocol=extended --report-per-command --jobs=2 --client=10 --transactions=50 --host="${database_ekm_host}" --username="${database_ekm_username}" ${database_ekm_name}
 }
 
 ########################################################################################################################
