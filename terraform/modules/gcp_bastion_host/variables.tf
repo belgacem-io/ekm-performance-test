@@ -21,7 +21,7 @@ variable "instance_name" {
 variable "instance_type" {
   type        = string
   description = "Type of the VM instance to create and allow SSH from IAP."
-  default     = "e2-medium" #"n1-standard-1"
+  default     = "n2-standard-4" #"n1-standard-1"
 }
 
 variable "region" {
