@@ -7,6 +7,6 @@ locals {
   gcp_terraform_sa_email = "${ get_env("GCP_IAC_SERVICE_ACCOUNT") }"
   gcp_project_id         = "${ get_env("PROJECT_ID") }"
   gcp_region             = "${ get_env("GCP_REGION") }"
-  ekm_type               = "EXTERNAL"
+  ekm_type               = "EXTERNAL_VPC"
 
 }
