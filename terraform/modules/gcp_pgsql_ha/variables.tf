@@ -3,6 +3,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "kms_project_id" {
+  description = "The project id where keys are managed."
+  type        = string
+}
+
 variable "prefix" {
   type        = string
   description = "A short prefix for all resources names."

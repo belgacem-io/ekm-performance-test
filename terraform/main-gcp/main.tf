@@ -47,6 +47,7 @@ module "ekm_pgsql" {
   prefix                               = var.prefix
   instance_name                        = "ekm"
   project_id                           = var.gcp_project_id
+  kms_project_id                       = var.gcp_kms_project_id
   default_region                       = var.gcp_region
   network_project_id                   = var.gcp_project_id
   network_name                         = module.vpc.network_name
@@ -91,7 +92,7 @@ module "bastion" {
   kms_key_algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
   kms_key_protection_level = "SOFTWARE"
   kms_key_external_url     = null
-  db_ekm = {
+  db_ekm                   = {
     name     = module.ekm_pgsql.db_name
     host     = module.ekm_pgsql.instance_ip_address
     username = random_string.db_user.result

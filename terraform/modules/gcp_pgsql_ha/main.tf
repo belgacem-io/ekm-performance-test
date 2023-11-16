@@ -72,7 +72,7 @@ resource "google_project_service_identity" "gcp_sa_cloud_sql" {
 # KMS settings
 module "db_encryption_key" {
   source                   = "../gcp_kms_key"
-  project_id               = var.project_id
+  project_id               = var.kms_project_id
   prefix                   = var.prefix
   default_region           = var.default_region
   kms_keyring_id           = var.kms_keyring_id

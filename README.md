@@ -12,6 +12,8 @@
    ```sh
    # GCP project where all resources will be created
    export PROJECT_ID=xx-myproject-test-xxx
+   # GCP project where all keys are managed
+   export GCP_KMS_PROJECT_ID=xx-security-test-xxx
    # Service account email used for creating resources                           
    export GCP_IAC_SERVICE_ACCOUNT=xx@xx-myproject-test-xxx.iam.gserviceaccount.com        
    # Default region where resources will be created
@@ -33,7 +35,7 @@
 
 5. Create and configure required resources
    ```sh
-    terragrunt --terragrunt-working-dir terragrunt/gcp run-all apply
+    terragrunt --terragrunt-working-dir terragrunt/gcp-thales-dpod run-all apply
    ```
 
 6. Connect to bastion host using IAP tunneling
