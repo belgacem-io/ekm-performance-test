@@ -38,7 +38,7 @@ variable "gcp_project_id" {
   description = "Project where all resources will be created"
   type        = string
 }
-variable "gcp_kms_project_id" {
+variable "gcp_ekm_project_id" {
   description = "Project where all resources will keys are managed"
   type        = string
 }

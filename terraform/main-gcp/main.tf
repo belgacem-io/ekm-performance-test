@@ -32,8 +32,8 @@ module "kms_pgsql" {
   root_user_password = random_password.db_password.result
   root_user_username = random_string.db_user.result
 
-  kms_project_id           = var.gcp_project_id
-  kms_keyring_id           = google_kms_key_ring.keyring.id
+  kms_project_id           = google_kms_key_ring.kms_keyring.project
+  kms_keyring_id           = google_kms_key_ring.kms_keyring.id
   kms_key_algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
   kms_key_protection_level = "SOFTWARE"
   kms_key_external_url     = null
@@ -62,8 +62,8 @@ module "ekm_pgsql" {
   root_user_password = random_password.db_password.result
   root_user_username = random_string.db_user.result
 
-  kms_project_id           = var.gcp_kms_project_id
-  kms_keyring_id           = google_kms_key_ring.keyring.id
+  kms_project_id           = google_kms_key_ring.ekm_keyring.project
+  kms_keyring_id           = google_kms_key_ring.ekm_keyring.id
   kms_key_algorithm        = "EXTERNAL_SYMMETRIC_ENCRYPTION"
   kms_key_protection_level = var.ekm_type
   kms_key_external_url     = var.ekm_key_external_url
