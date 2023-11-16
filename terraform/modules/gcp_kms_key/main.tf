@@ -38,7 +38,7 @@ resource "google_kms_crypto_key" "external_key" {
   Create key version
 *****************************************/
 resource "null_resource" "external_key_version" {
-  count = local.is_external_key ? 1 : 0
+  count = local.is_external_key && var.kms_key_external_url !=null ? 1 : 0
 
   triggers = {
     project_id = var.project_id
