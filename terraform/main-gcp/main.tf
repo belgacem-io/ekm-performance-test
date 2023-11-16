@@ -89,7 +89,7 @@ module "bastion" {
   network_self_link  = module.vpc.network_self_link
   subnet_self_link   = module.vpc.subnets_self_links[0]
 
-  kms_keyring_id           = google_kms_key_ring.keyring.id
+  kms_keyring_id           = google_kms_key_ring.kms_keyring.id
   kms_key_algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
   kms_key_protection_level = "SOFTWARE"
   kms_key_external_url     = null
